@@ -19,7 +19,12 @@
     "react-dom": "^16.12.0"
   },
   "devDependencies": {
-    "prettier": "2.1.2"
+    "@emotion/core": "^10.0.35",
+    "@emotion/styled": "^10.0.27",
+    "gatsby-plugin-emotion": "^4.3.12",
+    "prettier": "2.1.2",
+    "tailwindcss": "^1.8.10",
+    "twin.macro": "^1.10.0"
   },
   "repository": {
     "type": "git",
