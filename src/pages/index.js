@@ -14,7 +14,7 @@ const Input = styled.input`
   ${tw`bg-gray-400`}
 `
 const Form = styled.form`
-  ${tw`grid grid-rows-3`}
+  ${tw`grid grid-rows-4`}
 `
 
 export default function Home() {
@@ -31,6 +31,10 @@ export default function Home() {
   return <Container>
     <Heading>Children of Life Mother's Day Out</Heading> 
     <Form>
+      <div>
+        2 days a week <Input name="plan" type="radio" />
+        4 days a week <Input name="plan" type="radio" />
+      </div>
       <div>Number of Children <Input type="text" onChange={setNumberOfChildren} /></div>
       <div>Church Member <Input type="checkbox" /></div>
       <Button onClick={calculateCost}>Calculate Cost</Button>
