@@ -21,6 +21,12 @@ const Form = styled.form`
 `
 
 export default function Home() {
+  // const [numChildren, setNumChildren] = useState(0)
+  // const [cost, setCost] = useState(0)
+
+  // const setNumberOfChildren = evt => {
+  //   setNumChildren(evt.target.value)
+  // }
 
   return <Container>
     <Heading>Children of Life Mother's Day Out</Heading> 
@@ -33,13 +39,16 @@ function ChildForm () {
   const defaultChild = {dateOfBirth: ``}
   const [children, setChildren] = useState([defaultChild])
   const showOptions = evt => {
+    evt.preventDefault()
     console.log(`show options`)
   }
   const addChild = evt => {
+    evt.preventDefault()
     const newChildren = children.concat(defaultChild)
     setChildren(newChildren)
   }
   const updateChildBirthDate = (evt, index) => {
+    evt.preventDefault()
     const updatedChildren = children.map((ch, i) => {
       if (i === index) return { ...ch, dateOfBirth: evt.target.value }
       return ch
