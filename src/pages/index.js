@@ -7,41 +7,52 @@ const Container = styled.div`
 const Heading = styled.h1`
   ${tw`text-center text-3xl`}
   `
-const Button = styled.button`
+const Button1 = styled.button`
     ${tw`bg-blue-500 hover:bg-blue-800 text-white p-2 rounded`}
     `
+const Button2 = styled.button`
+    ${tw`bg-green-500 hover:bg-green-800 text-white p-2 rounded`}
+    `
 const Input = styled.input`
-  ${tw`bg-gray-400`}
+  ${tw`bg-gray-300`}
 `
 const Form = styled.form`
-  ${tw`grid grid-rows-4`}
+  ${tw`grid grid-rows-5`}
 `
 
 export default function Home() {
-  const [numChildren, setNumChildren] = useState(0)
-  const [cost, setCost] = useState(0)
-
-  const setNumberOfChildren = evt => {
-    setNumChildren(evt.target.value)
-  }
-  const calculateCost = evt => {
-    setCost(numChildren * 100)
-  }
 
   return <Container>
     <Heading>Children of Life Mother's Day Out</Heading> 
-    <Form>
-      <div>
-        2 days a week <Input name="plan" type="radio" />
-        4 days a week <Input name="plan" type="radio" />
-      </div>
-      <div>Number of Children <Input type="text" onChange={setNumberOfChildren} /></div>
-      <div>Church Member <Input type="checkbox" /></div>
-      <Button onClick={calculateCost}>Calculate Cost</Button>
-    </Form>
-    Cost: { cost }
+    <ChildForm />
   </Container>
   
+}
+
+function ChildForm () {
+  const defaultChild = {dateOfBirth: ``}
+  const [children, setChildren] = useState([defaultChild])
+  const showOptions = evt => {
+    console.log(`show options`)
+  }
+  const addChild = evt => {
+    const newChildren = children.concat(defaultChild)
+    setChildren(newChildren)
+  }
+  const updateChildBirthDate = (evt, index) => {
+    const updatedChildren = children.map((ch, i) => {
+      if (i === index) return { ...ch, dateOfBirth: evt.target.value }
+      return ch
+    })
+    setChildren(updatedChildren)
+  }
+  return <Form>
+      <div>Church Member <Input type="checkbox" /></div>
+      { children.map((ch, i) => <div>Date of Birth <Input type="text" placeholder="MM/DD/YYYY" onChange={evt => updateChildBirthDate(evt, i)} /></div>)
+      }
+      <Button2 onClick={addChild}>Add Child</Button2>
+      <Button1 onClick={showOptions}>Show Options</Button1>
+    </Form>
 }
 
 
