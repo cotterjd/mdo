@@ -54,11 +54,14 @@ function ChildForm () {
     */
     if (daysAWeek === 4 && ages.some(age => age < 3)) setWarning(`No 4 day a week option for children under 3`)
     else setWarning(``)
-    setTotal(ages.reduce((cost, age) => {
-      if (age === 0) return cost+=185
-      const result = cost+=(daysAWeek === 2 ? 165 : 330)
-      return isChurchMember ? result * 0.9 : result
-    }, 0))
+
+    const cost = ages.reduce((cost, age, i) => {
+        let childCost = 0
+        if (age === 0) childCost = 185
+        else childCost = daysAWeek === 2 ? 165 : 330
+        return cost+= (i > 0 ? childCost * .9 : childCost)
+      }, 0)
+    setTotal(isChurchMember ? cost * .9 : cost)
   }, [children, isChurchMember, daysAWeek])
   const addChild = evt => {
     evt.preventDefault()
