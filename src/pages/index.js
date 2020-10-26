@@ -42,6 +42,15 @@ function ChildForm () {
   const [daysAWeek, setDaysAWeek] = useState(4)
   const [warning, setWarning] = useState(``)
   const [total, setTotal] = useState(0)
+  const [breakdown, setBreakdown] = useState({
+    children: [{ 
+      age: 0,
+      subtotal: 0,
+      discounts: ``,
+      total: 0,
+    }],
+    total: 0
+  })
 
   useEffect(() => {
     const ages = children.map(getAge)
@@ -61,7 +70,24 @@ function ChildForm () {
         else childCost = daysAWeek === 2 ? 165 : 330
         return cost+= (i > 0 ? childCost * .9 : childCost)
       }, 0)
-    setTotal(isChurchMember ? cost * .9 : cost)
+    // setTotal(isChurchMember ? cost * .9 : cost)
+    const total = isChurchMember ? cost * .9 : cost
+    setBreakdown({
+      children: ages.map(getBreakdown),
+      total,
+    })
+
+    function getBreakdown (age, index) {
+      const subtotal = age === 0 ? 185 : (daysAWeek === 2 ? 165 : 330)
+      const afterChurchDiscount = isChurchMember ? subtotal * 0.9 : subtotal
+      const afterAdditionalChildDiscount = index > 0 ? afterChurchDiscount * 0.9 : afterChurchDiscount
+      return {
+        age,
+        subtotal,
+        discounts: [(isChurchMember ? 'Church Member' : ''), (index > 0 ? 'Additional Child' : '')].join(`, `),
+        total: afterAdditionalChildDiscount,
+      }
+    }
   }, [children, isChurchMember, daysAWeek])
   const addChild = evt => {
     evt.preventDefault()
@@ -87,7 +113,16 @@ function ChildForm () {
       }
       <Button2 onClick={addChild}>Add Child</Button2>
       <font color="red">{warning}</font>
-      <span><strong>Total:</strong>{total}</span>
+      { breakdown.children.map(child => {
+          return <div>
+            <div>{child.age}-year-old</div>
+            <div>subtotal: {child.subtotal}</div>
+            <div>discounts: {child.discounts}</div>
+            <div>child cost: {child.total}</div>
+          </div>
+        })
+      }
+      <span><strong>Total:</strong>{breakdown.total}</span>
     </Form>
 }
 function getAgeFromBirthDay (birthDate) {
