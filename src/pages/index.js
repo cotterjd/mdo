@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import tw, { styled } from 'twin.macro'
 
+const img1 = require(`../images/img1.jpg`)
+const img2 = require(`../images/img2.jpg`)
+const img3 = require(`../images/img3.jpg`)
+const img4 = require(`../images/img4.jpg`)
+const img5 = require(`../images/img5.jpg`)
+const img6 = require(`../images/img6.jpg`)
+const img7 = require(`../images/img7.jpg`)
+const img8 = require(`../images/img8.jpg`)
+const img9 = require(`../images/img9.jpg`)
+const img10 = require(`../images/img10.jpg`)
 const Container = styled.div`
   ${tw`px-20`}
 `
@@ -15,6 +25,23 @@ const Input = styled.input`
 `
 const Form = styled.form`
   ${tw`grid grid-rows-5`}
+`
+const Page = styled.div`
+`
+const BannerContainer = styled.div`
+  display: flex;
+`
+/*
+ * 400px h
+ * 450px w
+ */
+const RowOneImg = styled.img`
+  max-height: 400px;
+  max-width: 500px;
+`
+const RowTwoImg = styled.img`
+  max-height: 400px;
+  max-width: 400px;
 `
 
 export default function Home() {
@@ -36,7 +63,7 @@ export default function Home() {
  * 4 day a week is $330
  */
 function ChildForm () {
-  const defaultChild = {dateOfBirth: ``}
+  const defaultChild = {dateOfBirth: ``, age: 0}
   const [children, setChildren] = useState([defaultChild])
   const [isChurchMember, setIsChurchMember] = useState(false)
   const [daysAWeek, setDaysAWeek] = useState(4)
@@ -81,10 +108,13 @@ function ChildForm () {
       const subtotal = age === 0 ? 185 : (daysAWeek === 2 ? 165 : 330)
       const afterChurchDiscount = isChurchMember ? subtotal * 0.9 : subtotal
       const afterAdditionalChildDiscount = index > 0 ? afterChurchDiscount * 0.9 : afterChurchDiscount
+      const discounts = [] 
+      if (isChurchMember) discounts.push(`Church Member`)
+      if (index > 0) discounts.push(`Additional Child`)
       return {
         age,
         subtotal,
-        discounts: [(isChurchMember ? 'Church Member' : ''), (index > 0 ? 'Additional Child' : '')].join(`, `),
+        discounts: discounts.join(`, `),
         total: afterAdditionalChildDiscount,
       }
     }
@@ -102,7 +132,22 @@ function ChildForm () {
     })
     setChildren(updatedChildren)
   }
-  return <Form>
+  return <Page>
+    <BannerContainer>
+      <RowOneImg src={img1} />
+      <RowOneImg src={img2} />
+      <RowOneImg src={img3} />
+      <RowOneImg src={img4} />
+      <RowOneImg src={img5} />
+    </BannerContainer>
+    <BannerContainer>
+      <RowTwoImg src={img6} />
+      <RowTwoImg src={img7} />
+      <RowTwoImg src={img8} />
+      <RowTwoImg src={img9} />
+      <RowTwoImg src={img10} />
+    </BannerContainer>
+    <Form>
       <div>Church Member <Input onChange={evt => setIsChurchMember(!isChurchMember)} type="checkbox" /></div>
       <div>
         4 Days/Week <input type="radio" name="daysaweek" onChange={evt => setDaysAWeek(4)} />
@@ -113,19 +158,23 @@ function ChildForm () {
       }
       <Button2 onClick={addChild}>Add Child</Button2>
       <font color="red">{warning}</font>
-      { breakdown.children.map(child => {
-          return <div>
+      { breakdown.children[0].age !== null && breakdown.children.map(child => {
+          return <div style={{paddingTop: "10px"}}>
             <div>{child.age}-year-old</div>
             <div>subtotal: {child.subtotal}</div>
             <div>discounts: {child.discounts}</div>
-            <div>child cost: {child.total}</div>
+            <div>child cost: {child.total.toFixed(2)}</div>
           </div>
         })
       }
-      <span><strong>Total:</strong>{breakdown.total}</span>
+      <div style={{paddingTop: "10px"}}>
+        <span><strong>Total:</strong>{breakdown.total.toFixed(2)}</span>
+      </div>
     </Form>
+   </Page>
 }
 function getAgeFromBirthDay (birthDate) {
+  if (!birthDate) return 0
   return Math.floor(((new Date()).getTime() - (new Date(birthDate)).getTime()) / 1000 / 60 / 60 / 24 / 356)
 }
 function getAge (child) {
